@@ -18,7 +18,7 @@
  */
 var app = {
     // Application Constructor
-    initialize: function() {
+    initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
 
@@ -26,12 +26,26 @@ var app = {
     //
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
-    onDeviceReady: function() {
+    onDeviceReady: function () {
         this.receivedEvent('deviceready');
+        window.plugins.PushbotsPlugin.initialize("58f639144a9efafe048b4568", {
+            "android": {
+                "sender_id": "213290635959"
+            }
+        });
+        // Should be called once the device is registered successfully with Apple or Google servers
+        window.plugins.PushbotsPlugin.on("registered", function (token) {
+            console.log(token);
+        });
+
+        //Get device token
+        window.plugins.PushbotsPlugin.getRegistrationId(function (token) {
+            console.log("Registration Id:" + token);
+        });
     },
 
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
+    receivedEvent: function (id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
